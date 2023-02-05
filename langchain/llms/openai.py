@@ -277,15 +277,11 @@ class BaseOpenAI(BaseLLM, BaseModel):
                 "This is needed in order to calculate get_num_tokens. "
                 "Please it install it with `pip install tiktoken`."
             )
-        encoder = "gpt2"
-        if self.model_name in ("text-davinci-003", "text-davinci-002"):
-            encoder = "p50k_base"
-        if self.model_name.startswith("code"):
-            encoder = "p50k_base"
-        # create a GPT-3 encoder instance
-        enc = tiktoken.get_encoding(encoder)
 
-        # encode the text using the GPT-3 encoder
+        # create an encoder instance based on the model
+        enc = tiktoken.encoding_for_model(self.model_name)
+
+        # encode the text using the encoder
         tokenized_text = enc.encode(text)
 
         # calculate the number of tokens in the encoded text
